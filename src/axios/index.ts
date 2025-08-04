@@ -2,6 +2,7 @@ import axios, { type AxiosRequestHeaders } from "axios";
 import axiosStore from "@/hooks/stores/use-axios.ts";
 import userStore from "@/hooks/stores/use-user-store.ts";
 import { toast } from "sonner";
+import { router } from "@/routers/routes.tsx";
 
 // axios 实例
 const service = axios.create({
@@ -44,14 +45,18 @@ service.interceptors.response.use(
       // 请求成功发出，且服务器也响应了状态码，但是状态码有问题
       if (err.response.data.code === 401) {
         // Token 过期
-
         userStore.getState().setUser(null);
+
+        // 目前在登录过期时直接跳转登录页
+        // 后面可能要优化为在当前页重新登录，否则可能导致未保存内容丢失 TODO
+        router.navigate("/console", { replace: true }).then(() => {});
+
         const show401 = axiosStore.getState().show401;
 
         if (!show401) {
           // 当前没有 401 弹窗显示时，才弹出新的 401 提示弹窗，防止重复触发
           axiosStore.getState().setShow401(true);
-          toast.error("登录过期")
+          toast.error("登录过期");
           console.log("登录过期");
         }
         return Promise.reject("登录过期");
@@ -64,7 +69,7 @@ service.interceptors.response.use(
 
     // 非预期错误
     const msg = String(err.code ? err.code : err.response.data.errMsg);
-    toast.error(msg)
+    toast.error(msg);
     return Promise.reject(msg);
   },
 );

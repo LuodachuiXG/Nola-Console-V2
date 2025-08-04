@@ -54,7 +54,7 @@ export default function Header() {
   return (
     <div
       className={clsx(
-        "fixed top-0 left-0 z-0 w-dvw px-4 h-15 backdrop-blur-xl bg-background/5 flex items-center",
+        "fixed top-0 left-0 z-0 w-dvw px-4 h-15 backdrop-blur-2xl bg-background/5 flex items-center",
         {
           "pl-68": open && !isMobile,
         },

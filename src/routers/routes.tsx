@@ -1,9 +1,7 @@
 import { createBrowserRouter, redirect } from "react-router";
 import App from "@/App.tsx";
-import LoginPage from "@/pages/login/page.tsx";
-import OverviewPage from "@/pages/overview/page.tsx";
-import PostPage from "@/pages/post/page.tsx";
 import useUserStore from "@/hooks/stores/use-user-store.ts";
+import Routers from "@/routers/Routers.tsx";
 
 /**
  * 未登录跳转到登录页
@@ -38,17 +36,17 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <LoginPage />,
+        element: Routers.Login.element,
         loader: loginLoader,
       },
       {
-        path: "overview",
-        element: <OverviewPage />,
+        path: Routers.Overview.path,
+        element: Routers.Overview.element,
         loader: authLoader,
       },
       {
-        path: "post",
-        element: <PostPage />,
+        path: Routers.Post.path,
+        element: Routers.Post.element,
         loader: authLoader,
       },
     ],

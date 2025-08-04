@@ -1,6 +1,7 @@
 import service from "@/axios";
 import type ServerResponse from "@/models/response/ServerResponse.ts";
 import type { BlogInfo } from "@/features/blog/models/BlogInfo.ts";
+import type { BlogOverview } from "@/features/blog/models/BlogOverview.ts";
 
 /**
  * 获取博客信息
@@ -79,5 +80,15 @@ export function createBlogAdmin(
       email: email,
       password: password,
     },
+  });
+}
+
+/**
+ * 获取博客概览数据
+ */
+export function getOverview(): Promise<ServerResponse<BlogOverview>> {
+  return service({
+    url: "/admin/overview",
+    method: "GET",
   });
 }
