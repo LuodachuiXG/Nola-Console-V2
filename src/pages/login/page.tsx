@@ -92,7 +92,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="h-full flex justify-center items-center overflow-y-clip">
+      <div className="h-[calc(100dvh-5rem)] flex justify-center items-center overflow-y-clip">
         <Card
           className={clsx(
             "w-full transition-bezier max-w-sm -mt-15 transition-[height] overflow-clip",
