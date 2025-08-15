@@ -21,7 +21,7 @@ function App() {
       <Toaster position="top-center" />
       <div className="h-dvh w-screen antialiased overflow-y-auto">
         <SidebarProvider defaultOpen={false}>
-          <AppSidebar className="z-30" />
+          <AppSidebar className="z-100" />
           <main className="z-10 relative w-screen h-dvh">
             <Header />
             {/*内容容器*/}
