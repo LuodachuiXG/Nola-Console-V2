@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getOverview } from "@/features/blog/services/blog-services.ts";
 import type {
   BlogOverview,
@@ -22,6 +22,7 @@ import {
   Notebook as DiaryIcon,
   Paperclip as FileIcon,
   Tags as TagIcon,
+  Eye as VisitIcon,
 } from "lucide-react";
 import type { Post } from "@/features/post/models/Post.ts";
 
@@ -238,7 +239,7 @@ function MostViewedPost({ post }: { post: Post }) {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-[auto_1fr] bg-secondary rounded-md border overflow-clip">
+    <div className="w-full grid grid-cols-1 md:grid-cols-[auto_1fr] bg-secondary rounded-md border overflow-clip transition-all cursor-pointer active:scale-99 hover:border-primary active:border-primary/80">
       {cover && !imageError && (
         <img
           className=" object-cover max-w-full md:max-w-90"
@@ -247,36 +248,62 @@ function MostViewedPost({ post }: { post: Post }) {
           onError={() => setImageError(true)}
         />
       )}
-      <div className="p-4 flex flex-col gap-2 justify-between">
+      <div className="p-4 flex flex-col gap-2 justify-between w-full">
         <div className="flex flex-col gap-2">
           {/*文章标题*/}
           <p className="line-clamp-1 text-md md:text-xl">{post.title}</p>
           {/*文章摘要*/}
-          <p className="line-clamp-2 md:line-clamp-3 xl:line-clamp-4 text-sm md:text-md text-primary/70">
+          <p className="line-clamp-2 md:line-clamp-3 xl:line-clamp-4 text-sm md:text-md text-secondary-text">
             {post.excerpt}
           </p>
         </div>
-        {/*其他信息*/}
-        <div className="flex gap-2 md:gap-3 text-sm md:text-md">
+        {/*浏览量、分类、标签*/}
+        <div className="w-full overflow-x-clip flex gap-2 md:gap-3 text-sm md:text-md [&_svg]:size-3.5 md:[&_svg]:size-4">
+          {/*浏览量*/}
+          <div className="flex gap-1 items-center">
+            <VisitIcon />
+            <p>{post.visit}</p>
+          </div>
+
           {/*文章分类*/}
           {post.category && (
-            <div className="flex gap-1 items-center [&>svg]:size-3.5 md:[&>svg]:size-4">
+            <div className="flex gap-1 items-center">
               <CategoryIcon />
               <p>{post.category.displayName}</p>
             </div>
           )}
 
-          {/*文章分类*/}
-          {post.tags.length > 0 && (
-            <div className="flex gap-2 md:gap-3 line-clamp-1">
-              {post.tags.map((tag) => (
-                <div className="flex gap-1 items-center [&>svg]:size-3.5 md:[&>svg]:size-4">
-                  <TagIcon />
-                  <p>{tag.displayName}</p>
-                </div>
-              ))}
-            </div>
-          )}
+          {/*文章标签*/}
+          {post.tags.length > 0 &&
+            (post.tags.length > 2 ? (
+              // 3 个及以上标签
+              <div
+                className="flex gap-1 items-center [&>svg]:size-3.5 md:[&>svg]:size-4"
+                title={
+                  "标签：" + post.tags.map((tag) => tag.displayName).join(", ")
+                }
+              >
+                <TagIcon />
+                <p>{post.tags.length} 个标签</p>
+              </div>
+            ) : (
+              // 2 个以下标签
+              <div className="flex gap-2 md:gap-3">
+                {post.tags.map((tag) => (
+                  <div className="flex gap-1 items-center [&>svg]:size-3.5 md:[&>svg]:size-4">
+                    <TagIcon />
+                    <p>{tag.displayName}</p>
+                  </div>
+                ))}
+              </div>
+            ))}
+
+          {/*时间*/}
+          <div className="w-full text-end">
+            <p className="text-sm md:text-md line-clamp-1 text-secondary-text">
+              {timestampToDate(post.createTime)}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -316,7 +343,7 @@ function OverviewCard({
   return (
     <div
       className={clsx(
-        "group relative overflow-clip p-4 rounded-md bg-secondary flex flex-col gap-4 w-full fade-in-container select-none border-1 border-transparent",
+        "group relative overflow-clip p-4 rounded-md bg-secondary flex flex-col gap-4 w-full fade-in-container border-1 border-transparent",
         {
           "transition-all cursor-pointer active:scale-98 hover:border-primary  active:border-primary/80":
             clickable,
