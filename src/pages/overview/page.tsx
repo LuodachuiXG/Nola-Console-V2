@@ -290,7 +290,10 @@ function MostViewedPost({ post }: { post: Post }) {
               // 2 个以下标签
               <div className="flex gap-2 md:gap-3">
                 {post.tags.map((tag) => (
-                  <div className="flex gap-1 items-center [&>svg]:size-3.5 md:[&>svg]:size-4">
+                  <div
+                    className="flex gap-1 items-center [&>svg]:size-3.5 md:[&>svg]:size-4"
+                    key={tag.tagId}
+                  >
                     <TagIcon />
                     <p>{tag.displayName}</p>
                   </div>
