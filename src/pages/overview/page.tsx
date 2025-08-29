@@ -357,9 +357,9 @@ function OverviewCard({
       {background && !imageError && (
         <>
           <div className="absolute z-0 left-0 top-0 size-full">
-            <div className="transition-colors size-full absolute z-10 bg-gradient-to-b from-white/50 dark:from-black/60 to-transparent group-hover:from-transparent"></div>
+            <div className="transition-colors size-full absolute z-10 bg-gradient-to-b from-white/30 dark:from-black/30 to-transparent group-hover:from-transparent"></div>
             <img
-              className="transition-transform size-full object-cover group-hover:scale-115"
+              className="transition-transform size-full object-cover group-hover:scale-105"
               src={background}
               alt={title}
               onError={() => {

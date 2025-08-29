@@ -5,7 +5,7 @@ import { Outlet, useLocation } from "react-router";
 import Header from "@/components/layout/header.tsx";
 import { Toaster } from "@/components/ui/sonner";
 import { useEffect } from "react";
-import Routers from "@/routers/Routers.tsx";
+import Routers from "@/routers/router.tsx";
 import clsx from "clsx";
 
 /**

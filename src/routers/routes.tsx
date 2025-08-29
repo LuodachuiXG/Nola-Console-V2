@@ -1,7 +1,7 @@
 import { createBrowserRouter, redirect } from "react-router";
 import App from "@/App.tsx";
 import useUserStore from "@/hooks/stores/use-user-store.ts";
-import Routers from "@/routers/Routers.tsx";
+import Routers from "@/routers/router.tsx";
 
 /**
  * 未登录跳转到登录页
