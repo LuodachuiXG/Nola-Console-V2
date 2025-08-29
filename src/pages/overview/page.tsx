@@ -239,10 +239,10 @@ function MostViewedPost({ post }: { post: Post }) {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-[auto_1fr] bg-secondary rounded-md border overflow-clip transition-all cursor-pointer active:scale-99 hover:border-primary active:border-primary/80">
+    <div className="w-full grid grid-cols-1 lg:grid-cols-[auto_1fr] bg-secondary rounded-md border overflow-clip transition-all cursor-pointer active:scale-99 hover:border-primary active:border-primary/80">
       {cover && !imageError && (
         <img
-          className=" object-cover max-w-full md:max-w-90"
+          className="object-cover max-w-full lg:max-w-90"
           src={cover}
           alt={post.title}
           onError={() => setImageError(true)}
@@ -302,7 +302,7 @@ function MostViewedPost({ post }: { post: Post }) {
             ))}
 
           {/*时间*/}
-          <div className="w-full text-end">
+          <div className="w-full text-end lg:block">
             <p className="text-sm md:text-md line-clamp-1 text-secondary-text">
               {timestampToDate(post.createTime)}
             </p>
@@ -350,7 +350,7 @@ function OverviewCard({
         {
           "transition-all cursor-pointer active:scale-98 hover:border-primary  active:border-primary/80":
             clickable,
-        },
+        }
       )}
       onClick={onClick}
     >
@@ -376,7 +376,7 @@ function OverviewCard({
             "text-md md:text-xl line-clamp-1 transition-[font-size]",
             {
               "text-shadow-lg": background && !imageError,
-            },
+            }
           )}
         >
           {title}

@@ -1,6 +1,6 @@
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar.tsx";
 import ThemeController from "@/components/shared/theme-controller.tsx";
-import { useSpring, animated } from "@react-spring/web";
+import { animated, useSpring } from "@react-spring/web";
 import { useEffect } from "react";
 import { clsx } from "clsx";
 import useUserStore from "@/hooks/stores/use-user-store.ts";
@@ -54,13 +54,14 @@ export default function Header() {
   return (
     <div
       className={clsx(
-        "fixed top-0 left-0 z-100 w-dvw px-4 h-15 backdrop-blur-3xl bg-background/80 flex items-center",
+        "fixed top-0 left-0 w-full z-20 px-4 h-15 backdrop-blur-3xl bg-background/80 flex items-center",
         {
-          "pl-68": open && !isMobile,
+          "pl-2": isMobile || !open,
+          "pl-66": !isMobile && open
         },
       )}
       style={{
-        transition: "padding-left 0.3s ease-out",
+        transition: "padding-left 0.3s ease",
       }}
     >
       {/* 已登录才显示 SidebarTrigger */}
