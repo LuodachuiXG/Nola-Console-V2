@@ -1,7 +1,7 @@
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar.tsx";
 import ThemeController from "@/components/shared/theme-controller.tsx";
 import { animated, useSpring } from "@react-spring/web";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { clsx } from "clsx";
 import useUserStore from "@/hooks/stores/use-user-store.ts";
 import { useOnlineCount } from "@/hooks/use-online-count.ts";
@@ -11,11 +11,38 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
 import { timestampToDate } from "@/utils/date-utils.ts";
-import { Link } from "lucide-react";
+import {
+  Link,
+  LogOut as LogOutIcon,
+  RotateCcwKey as PasswordIcon,
+  UserRound as UserIcon,
+} from "lucide-react";
+import type { User } from "@/features/user/models/User.ts";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
+import LogOutDialog from "@/features/user/components/LogOutDialog.tsx";
+import Routers from "@/routers/router.tsx";
+import { useNavigate } from "react-router";
 
 export default function Header() {
   // 当前是否已登录
   const isLogin = useUserStore((state) => state.isLogin);
+  // 当前登录的用户
+  const user = useUserStore((state) => state.user);
+  // 设置用户
+  const setUser = useUserStore((state) => state.setUser);
+
+  const navigate = useNavigate();
 
   // 侧边栏
   const { open, isMobile } = useSidebar();
@@ -61,6 +88,12 @@ export default function Header() {
     }
   }, [open, api, isLogin]);
 
+  // 退出登录
+  function logOut() {
+    setUser(null);
+    navigate(Routers.Login.path, { replace: true });
+  }
+
   return (
     <div
       className={clsx(
@@ -71,7 +104,7 @@ export default function Header() {
         },
       )}
       style={{
-        transition: "padding-left 0.3s ease",
+        transition: "padding-left 0.3s ease-in-out",
       }}
     >
       {/* 已登录才显示 SidebarTrigger */}
@@ -81,12 +114,68 @@ export default function Header() {
         </animated.div>
       )}
       <div className="grow flex gap-2 items-center justify-end">
-        {/*博客在线人数显示*/}
-        <BlogOnlineCounter />
+        {isLogin && user && (
+          <>
+            {/*博客在线人数显示*/}
+            <BlogOnlineCounter />
+            {/*登录的博主*/}
+            <Blogger user={user} onLogOut={logOut} />
+          </>
+        )}
         {/*主题切换按钮*/}
         <ThemeController />
       </div>
     </div>
+  );
+}
+
+/**
+ * 博主按钮组件
+ * @param user 当前登录用户
+ * @param onLogOut 退出登录回调
+ */
+function Blogger({ user, onLogOut }: { user: User; onLogOut: () => void }) {
+  // 是否显示退出登录弹窗
+  const [showLogOutDialog, setShowLogOutDialog] = useState(false);
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <div className="flex items-center p-2 py-1.5 gap-2 rounded-md transition-colors hover:bg-accent dark:hover:bg-accent/50">
+            <Avatar className="size-5">
+              <AvatarImage src={user.avatar ?? undefined} />
+              <AvatarFallback className="text-xs">
+                {user.displayName.slice(0, 1)}
+              </AvatarFallback>
+            </Avatar>
+            <p className="text-sm">{user.displayName}</p>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>
+            <UserIcon />
+            <p>个人信息</p>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <PasswordIcon />
+            <p>修改密码</p>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => setShowLogOutDialog(true)}>
+            <LogOutIcon />
+            <p>退出登录</p>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/*退出登录弹窗*/}
+      <LogOutDialog
+        show={showLogOutDialog}
+        onChange={setShowLogOutDialog}
+        onConfirm={onLogOut}
+      />
+    </>
   );
 }
 
@@ -118,7 +207,7 @@ function BlogOnlineCounter() {
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-1">
                 <span>通过 SSE</span>
-                <Link className="size-3"/>
+                <Link className="size-3" />
                 <span>实时获取在线人数</span>
               </div>
               <div className="flex items-center">

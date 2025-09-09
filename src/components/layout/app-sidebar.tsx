@@ -121,7 +121,7 @@ function AppSidebar({ className }: React.ComponentProps<"div">) {
   }, [isLogin]);
 
   return (
-    <Sidebar className={clsx("z-100", className)} variant="sidebar">
+    <Sidebar className={clsx("z-20", className)} variant="sidebar">
       <SidebarHeader>
         <div className="flex gap-4 items-center justify-center mt-2 group/logo min-h-16 ">
           <img

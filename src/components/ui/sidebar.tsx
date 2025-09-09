@@ -205,7 +205,7 @@ function Sidebar({
 
   return (
     <div
-      className="z-100 group peer text-sidebar-foreground hidden md:block fixed left-0 top-0"
+      className="z-20 group peer text-sidebar-foreground hidden md:block fixed left-0 top-0"
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}

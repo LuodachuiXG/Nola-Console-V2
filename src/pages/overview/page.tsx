@@ -242,7 +242,7 @@ function MostViewedPost({ post }: { post: Post }) {
     <div className="w-full grid grid-cols-1 lg:grid-cols-[auto_1fr] bg-secondary rounded-md border overflow-clip transition-all cursor-pointer active:scale-99 hover:border-primary active:border-primary/80">
       {cover && !imageError && (
         <img
-          className="object-cover max-w-full lg:max-w-90"
+          className="object-cover w-full max-w-full lg:max-w-90"
           src={cover}
           alt={post.title}
           onError={() => setImageError(true)}

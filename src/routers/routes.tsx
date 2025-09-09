@@ -23,6 +23,7 @@ const authLoader = () => {
 const loginLoader = () => {
   const isLogin = useUserStore.getState().isLogin;
   if (isLogin) {
+    console.log("已登录");
     // 已登录
     throw redirect("/console/overview");
   }
