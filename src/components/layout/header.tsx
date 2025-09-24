@@ -33,6 +33,7 @@ import {
 import LogOutDialog from "@/features/user/components/LogOutDialog.tsx";
 import Routers from "@/routers/router.tsx";
 import { useNavigate } from "react-router";
+import UpdateUserInfoDialog from "@/features/user/components/UpdateUserInfoDialog.tsx";
 
 export default function Header() {
   // 当前是否已登录
@@ -137,6 +138,8 @@ export default function Header() {
 function Blogger({ user, onLogOut }: { user: User; onLogOut: () => void }) {
   // 是否显示退出登录弹窗
   const [showLogOutDialog, setShowLogOutDialog] = useState(false);
+  // 是否显示个人信息弹窗
+  const [showUserInfoDialog, setShowUserInfoDialog] = useState(false);
 
   return (
     <>
@@ -149,11 +152,11 @@ function Blogger({ user, onLogOut }: { user: User; onLogOut: () => void }) {
                 {user.displayName.slice(0, 1)}
               </AvatarFallback>
             </Avatar>
-            <p className="text-sm">{user.displayName}</p>
+            <p className="text-sm line-clamp-1">{user.displayName}</p>
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setShowUserInfoDialog(true)}>
             <UserIcon />
             <p>个人信息</p>
           </DropdownMenuItem>
@@ -168,6 +171,12 @@ function Blogger({ user, onLogOut }: { user: User; onLogOut: () => void }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {/*个人信息弹窗*/}
+      <UpdateUserInfoDialog
+        show={showUserInfoDialog}
+        onChange={setShowUserInfoDialog}
+      />
 
       {/*退出登录弹窗*/}
       <LogOutDialog
@@ -198,7 +207,7 @@ function BlogOnlineCounter() {
               <OnlineCounterIndicator
                 status={onlineCount < 0 ? "error" : "success"}
               />
-              <p className="text-sm text-foreground">
+              <p className="text-sm text-foreground line-clamp-1">
                 在线人数：{onlineCount < 0 ? "未知" : onlineCount}
               </p>
             </div>
@@ -236,7 +245,7 @@ function OnlineCounterIndicator({ status }: { status: "success" | "error" }) {
   return (
     <div
       className={clsx(
-        "size-2 rounded-full relative before:content-[''] before:absolute before:size-2 before:left-0 before:top-0 before:animate-ping before:rounded-full",
+        "min-w-2 min-h-2 size-2 rounded-full relative before:content-[''] before:absolute before:size-2 before:left-0 before:top-0 before:animate-ping before:rounded-full",
         {
           "bg-green-500 before:bg-green-500": status === "success",
           "bg-red-500 before:bg-red-500": status === "error",

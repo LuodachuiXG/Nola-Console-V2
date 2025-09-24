@@ -1,65 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { getOverview } from "@/features/blog/services/blog-services.ts";
-import type {
-  BlogOverview,
-  BlogOverviewCount,
-} from "@/features/blog/models/BlogOverview.ts";
+import type { BlogOverviewCount } from "@/features/blog/models/BlogOverview.ts";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
-import {
-  getDaysSinceTimestamp,
-  getTimeSinceTimestamp,
-  timestampToDate,
-} from "@/utils/date-utils.ts";
+import { getDaysSinceTimestamp, getTimeSinceTimestamp, timestampToDate } from "@/utils/date-utils.ts";
 import useUserStore from "@/hooks/stores/use-user-store.ts";
 import useItemCountStore from "@/hooks/stores/use-item-count-store.ts";
 import clsx from "clsx";
 import {
   BookOpen as PostIcon,
   ChartColumnStacked as CategoryIcon,
+  Eye as VisitIcon,
   Link as LinkIcon,
   Menu as MenuIcon,
   MessageSquare as CommentIcon,
   Notebook as DiaryIcon,
   Paperclip as FileIcon,
-  Tags as TagIcon,
-  Eye as VisitIcon,
+  Tags as TagIcon
 } from "lucide-react";
 import type { Post } from "@/features/post/models/Post.ts";
+import { useRequest } from "ahooks";
 
 /**
  * 概述页面
  * @constructor
  */
 export default function OverviewPage() {
-  // 博客概述数据
-  const [blogOverview, setBlogOverview] = useState<BlogOverview | null>(null);
-  // 是否正在加载
-  const [loading, setLoading] = useState(true);
   // 当前登录的用户
   const user = useUserStore((state) => state.user);
-
-  // 博客创建时间
-  const blogCreateDate = blogOverview?.createDate ?? Date.now();
-  // 最后登录时间
-  const lastLoginDate = user?.lastLoginDate ?? Date.now();
 
   // 设置当前博客内容的项目数量
   const setItemCount = useItemCountStore((state) => state.setItemCount);
 
+  // 博客概述数据
+  const { data, loading } = useRequest(getOverview);
+
+  const blogOverview = data?.data;
+
+  // 博客创建时间
+  const blogCreateDate = blogOverview?.createDate ?? Date.now();
+
+  // 最后登录时间
+  const lastLoginDate = user?.lastLoginDate ?? Date.now();
+
   useEffect(() => {
-    // 获取概述信息
-    getOverview()
-      .then((res) => {
-        setBlogOverview(res.data);
-        setLoading(false);
-        if (res.data?.count) {
-          setItemCount(res.data?.count);
-        }
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  }, [setItemCount]);
+    if (blogOverview?.count) {
+      setItemCount(blogOverview?.count);
+    }
+  }, [blogOverview, setItemCount]);
 
   if (loading) {
     return OverviewSkeleton();
@@ -350,7 +337,7 @@ function OverviewCard({
         {
           "transition-all cursor-pointer active:scale-98 hover:border-primary  active:border-primary/80":
             clickable,
-        }
+        },
       )}
       onClick={onClick}
     >
@@ -376,7 +363,7 @@ function OverviewCard({
             "text-md md:text-xl line-clamp-1 transition-[font-size]",
             {
               "text-shadow-lg": background && !imageError,
-            }
+            },
           )}
         >
           {title}

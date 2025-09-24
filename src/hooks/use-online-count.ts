@@ -35,7 +35,6 @@ export const useOnlineCount = () => {
       setOnlineCount(-1);
       setUpdateTime(-1);
       sseRef.current?.close();
-      console.log("SSE 通道已关闭");
       return;
     }
 
@@ -55,7 +54,6 @@ export const useOnlineCount = () => {
 
     sseRef.current = es;
     es.onopen = () => {
-      console.log("SSE 通道已打开");
     };
     es.onerror = (error) => {
       console.error("SSE 错误:" + error.message);
@@ -84,7 +82,6 @@ export const useOnlineCount = () => {
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
       es.close();
-      console.log("SSE 通道已关闭");
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [token]);

@@ -22,7 +22,7 @@ export function login(
 /**
  * 获取当前登录的管理员信息
  */
-export function getUserInfo() {
+export function getUserInfo(): Promise<ServerResponse<User>> {
   return service({
     url: "/admin/user",
     method: "GET",
@@ -30,7 +30,7 @@ export function getUserInfo() {
 }
 
 /**
- * 获取当前登录的管理员信息
+ * 修改管理员信息
  * @param username 用户名
  * @param email 邮箱
  * @param displayName 昵称
@@ -43,7 +43,7 @@ export function updateUserInfo(
   displayName: string,
   description: string | null,
   avatar: string | null,
-) {
+): Promise<ServerResponse<boolean>> {
   return service({
     url: "/admin/user",
     method: "PUT",
@@ -58,7 +58,7 @@ export function updateUserInfo(
 }
 
 /**
- * 获取当前登录的管理员信息
+ * 修改管理员密码
  * @param password 密码
  */
 export function updateUserPassword(password: string) {

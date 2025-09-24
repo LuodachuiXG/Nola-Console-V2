@@ -2,20 +2,22 @@
  * 用户接口
  */
 export interface User {
+  /** 用户 ID **/
+  userId?: number;
   /** 用户名 **/
-  username: string,
+  username: string;
   /** 邮箱 **/
-  email: string,
+  email: string;
   /** 显示名称 **/
-  displayName: string,
+  displayName: string;
   /** 描述 **/
-  description: string | null,
+  description: string | null;
   /** 创建日期 **/
-  createDate: number,
+  createDate: number;
   /** 最后登录时间 **/
-  lastLoginDate: number | null,
+  lastLoginDate: number | null;
   /** 头像 **/
-  avatar: string | null,
+  avatar: string | null;
   /** Token 令牌 **/
-  token: string
+  token: string;
 }
