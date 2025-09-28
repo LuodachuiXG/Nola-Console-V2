@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import * as z from "zod";
 import useUserStore from "@/hooks/stores/use-user-store.ts";
 import type { User } from "@/features/user/models/User.ts";
+import DialogLoadingTitle from "@/components/shared/dialog-loading-title.tsx";
 
 // 表单验证 schema
 const userInfoSchema = z.object({
@@ -33,12 +34,8 @@ const userInfoSchema = z.object({
     .string()
     .min(1, "昵称不能为空")
     .max(128, "名称长度不能大于 128"),
-  avatar: z.url().max(512, "URL 长度不能大于 512").nullable().or(z.literal("")),
-  description: z
-    .string()
-    .max(1024, "描述长度不能大于 1024")
-    .nullable()
-    .or(z.literal("")),
+  avatar: z.url().max(512, "URL 长度不能大于 512").nullable(),
+  description: z.string().max(1024, "描述长度不能大于 1024").nullable(),
 });
 
 type UserInfoFormData = z.infer<typeof userInfoSchema>;
@@ -158,10 +155,13 @@ export default function UpdateUserInfoDialog({
       <Dialog open={show} onOpenChange={onChange}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>个人信息</DialogTitle>
+            <DialogTitle>
+              <DialogLoadingTitle title="个人信息" loading={loading} />
+            </DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          <form onSubmit={onSubmit}>
+
+          <form onSubmit={onSubmit} className="fade-in-container">
             <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
               <div className="grid gap-2">
                 <Label htmlFor="username">

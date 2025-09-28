@@ -34,6 +34,7 @@ import LogOutDialog from "@/features/user/components/LogOutDialog.tsx";
 import Routers from "@/routers/router.tsx";
 import { useNavigate } from "react-router";
 import UpdateUserInfoDialog from "@/features/user/components/UpdateUserInfoDialog.tsx";
+import UpdatePasswordDialog from "@/features/user/components/UpdatePasswordDialog.tsx";
 
 export default function Header() {
   // 当前是否已登录
@@ -140,6 +141,8 @@ function Blogger({ user, onLogOut }: { user: User; onLogOut: () => void }) {
   const [showLogOutDialog, setShowLogOutDialog] = useState(false);
   // 是否显示个人信息弹窗
   const [showUserInfoDialog, setShowUserInfoDialog] = useState(false);
+  // 是否显示修改密码弹窗
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
 
   return (
     <>
@@ -160,7 +163,7 @@ function Blogger({ user, onLogOut }: { user: User; onLogOut: () => void }) {
             <UserIcon />
             <p>个人信息</p>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setShowPasswordDialog(true)}>
             <PasswordIcon />
             <p>修改密码</p>
           </DropdownMenuItem>
@@ -176,6 +179,12 @@ function Blogger({ user, onLogOut }: { user: User; onLogOut: () => void }) {
       <UpdateUserInfoDialog
         show={showUserInfoDialog}
         onChange={setShowUserInfoDialog}
+      />
+
+      {/*修改密码弹窗*/}
+      <UpdatePasswordDialog
+        show={showPasswordDialog}
+        onChange={setShowPasswordDialog}
       />
 
       {/*退出登录弹窗*/}

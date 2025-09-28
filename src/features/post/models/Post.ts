@@ -1,5 +1,7 @@
 import type { Category } from "@/features/category/models/Category.ts";
 import type { Tag } from "@/features/tag/models/Tag.ts";
+import type { PostVisible } from "@/features/post/models/PostVisible.ts";
+import type { PostStatus } from "@/features/post/models/PostStatus.ts";
 
 /**
  * 文章接口
@@ -40,8 +42,3 @@ export interface Post {
   /** 文章最后修改时间戳 */
   lastModifyTime: number | null;
 }
-
-/** 文章状态：已删除（已回收）、草稿、已发布 **/
-export type PostStatus = "DELETED" | "DRAFT" | "PUBLISHED";
-/** 文章可见性：可见、隐藏 **/
-export type PostVisible = "VISIBLE" | "HIDDEN";
